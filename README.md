@@ -20,12 +20,19 @@ LI_FN(VirtualProtect).in(LI_MODULE("kernel32.dll").cached());
 - Produces extremely small assembly.
 - Non caching functions do not leave anything in data sections.
 - Hashes are randomized for each compilation to defeat basic hash database attacks.
+- Supports Windows kernel drivers.
+- It its possible to "encrypt" the pointers that contains the procedure address.
+
+## limitations
+
+- For Windows kernel drivers it's only supported on Windows 10 because it relies on exported procedure `PsLoadedModuleList` which is not exported in earlier Windows versions.
 
 ## documentation
 
 - `LI_FN(function_pointer)  -> lazy_function`
 - `LI_FN_DEF(function_type) -> lazy_function`
 - `LI_MODULE(module_name)  -> lazy_module`
+- `LI_PTR(function_pointer)  -> cached pointer to function`
 
 ---
 
@@ -214,6 +221,7 @@ LI_FN(VirtualProtect).in(LI_MODULE("kernel32.dll").cached());
 | `LAZY_IMPORTER_RESOLVE_FORWARDED_EXPORTS` | uses `forwarded()` in `get()`. WARNING does not apply to `nt()` and `in()`.             |
 | `LAZY_IMPORTER_HARDENED_MODULE_CHECKS`    | adds extra sanity checks to module enumeration.                                         |
 | `LAZY_IMPORTER_NO_CPP_FORWARD`            | Removes dependence on `<utility>` c++ header.                                           | 
+| `LAZY_IMPORTER_ENCODE_POINTER`            | Add pointer encoding on resulting IAT function address                                  | 
 
 ## example output
 
